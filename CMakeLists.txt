@@ -1,0 +1,25 @@
+# Путь к исходникам движка
+set(engine_dir "${CMAKE_SOURCE_DIR}/../engine")
+
+# Указываем минимальную версию CMake
+include(${engine_dir}/cmake/cmake_min_version.cmake)
+cmake_minimum_required(VERSION ${DV_CMAKE_MIN_VERSION})
+
+# Название проекта
+project("mini games")
+
+# Подключаем директорию с движком
+include(${engine_dir}/cmake/common.cmake)
+add_subdirectory(${engine_dir} dviglo2d)
+
+# Папка для скомпилированных игр
+set(result_dir "${CMAKE_BINARY_DIR}/result")
+
+# Создаём папку result
+file(MAKE_DIRECTORY ${result_dir})
+
+# Указываем папку для следующих скомпилированных экзешников
+dv_set_bin_dir(${result_dir})
+
+add_subdirectory(15_puzzle)
+add_subdirectory(safe)
