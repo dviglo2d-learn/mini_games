@@ -1,0 +1,215 @@
+# Copyright (c) the Dviglo project
+# Copyright (c) 2008-2023 the Urho3D project
+# License: MIT
+
+name: CI/CD
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  Windows:
+    # Job будет запущен на виртуальной машине с новейшей версией Windows
+    # https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idruns-on
+    # https://github.com/actions/runner-images
+    runs-on: windows-latest
+
+    # Используем матрицу для параллельной сборки разных билдов
+    # https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idstrategy
+    strategy:
+      fail-fast: false
+      matrix:
+        COMPILER: [vs, mingw]
+        BUILD_TYPE: [debug, release]
+
+    # Отображаемое имя job
+    # https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idname
+    name: 🔲-${{ matrix.COMPILER }}-${{ matrix.BUILD_TYPE }}
+
+    steps:
+      # Используем MSYS2 вместо устаревшего MinGW
+      # https://github.com/urho3d/urho3D/issues/2887
+    - name: Устанавливаем MinGW
+      if: matrix.COMPILER == 'mingw'
+      # https://www.msys2.org/docs/ci/
+      # https://github.com/msys2/setup-msys2
+      uses: msys2/setup-msys2@v2
+      with:
+        update: true
+        install: mingw-w64-x86_64-toolchain
+
+    - name: Добавляем в PATH путь к MinGW
+      if: matrix.COMPILER == 'mingw'
+      shell: bash
+      # https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#adding-a-system-path
+      run: echo "${RUNNER_TEMP}/msys64/mingw64/bin" >> $GITHUB_PATH
+
+    - name: Устанавливаем остальной софт
+      shell: bash
+      run: |
+        choco install --no-progress graphviz.portable
+
+        # choco качает Doxygen через раз. Качаем собственную сборку
+        mkdir $GITHUB_WORKSPACE/programs
+        cd $GITHUB_WORKSPACE/programs
+        curl -Lso tmp.zip https://github.com/dviglo-tools/doxygen-builder/raw/main/doxygen_win64.zip && unzip tmp.zip && rm tmp.zip
+        echo "$GITHUB_WORKSPACE/programs" >> $GITHUB_PATH
+        echo "Собственная сборка Doxygen скачана в $GITHUB_WORKSPACE/programs"
+
+    - name: Скачиваем репозиторий
+      # https://github.com/actions/checkout
+      uses: actions/checkout@v4
+      with:
+        path: repo # Папка, в которую будет скачан репозиторий
+        submodules: recursive # Движок тоже качаем
+
+    - name: Генерируем проекты
+      shell: bash
+      run: |
+        ARGS=(repo -B build) # Массив аргументов
+
+        if [ "${{ matrix.COMPILER }}" == "vs" ]
+        then
+          ARGS+=(-G "Visual Studio 17 2022")
+        else
+          ARGS+=(-G "MinGW Makefiles")
+          # Для MinGW тип сбоки задаётся при генерации проектов
+          ARGS+=(-D CMAKE_BUILD_TYPE=${{ matrix.BUILD_TYPE }})
+        fi
+
+        ARGS+=(-D DV_CTEST=1)
+
+        cmake "${ARGS[@]}"
+
+    - name: Компилируем
+      shell: bash
+      run: |
+        ARGS=(--build build) # Массив аргументов
+
+        if [ "${{ matrix.COMPILER }}" == "vs" ]
+        then
+          # Для Visual Studio тип сбоки задаётся при компиляции проектов
+          ARGS+=(--config ${{ matrix.BUILD_TYPE }})
+        fi
+
+        cmake "${ARGS[@]}"
+
+      # Виртуальная машина ГитХаба может запускать Direct3D-приложения,
+      # но не может запускать OpenGL-приложения. Поэтому используем
+      # предкомпилированный Mesa 3D for Windows
+    - name: Качаем Mesa 3D
+      shell: bash
+      run: |
+        # Качаем и распаковываем Mesa 3D
+        # https://curl.se/docs/manpage.html
+        curl.exe --location --output mesa.7z --url https://github.com/pal1000/mesa-dist-win/releases/download/22.2.3/mesa3d-22.2.3-release-msvc.7z
+        7z x mesa.7z -omesa
+        rm mesa.7z
+
+        # Перемещаем нужные dll в папку result
+        #mv mesa/x64/dxil.dll build/result # Используется при эмуляции через DirectX
+        mv mesa/x64/libgallium_wgl.dll build/result
+        mv mesa/x64/libglapi.dll build/result
+        mv mesa/x64/opengl32.dll build/result
+
+    - name: CTest
+      shell: bash {0} # Разрешаем перехват ошибок
+      run: |
+        ARGS=(--test-dir build --timeout 60) # Массив аргументов
+
+        if [ "${{ matrix.COMPILER }}" == "vs" ]
+        then
+          # Для Visual Studio нужно указывать тип сборки (конфигурацию)
+          ARGS+=(-C ${{ matrix.BUILD_TYPE }})
+        fi
+
+        # Настройка для Mesa (не используем DirectX для эмуляции).
+        # Без этого не проходит тест примера pbr_materials.
+        # https://docs.mesa3d.org/envvars.html
+        export LIBGL_ALWAYS_SOFTWARE=true
+
+        ctest "${ARGS[@]}"
+        EXIT_CODE=$? # Код возврата предыдущей команды
+
+        if (( $EXIT_CODE != 0 )) 
+        then
+          echo "$(cat D:/a/mini_games/mini_games/build/Testing/Temporary/LastTest.log)" # Показываем содержимое лога
+          exit $EXIT_CODE
+        fi
+
+  Linux_Native:
+    runs-on: ubuntu-24.04
+
+    strategy:
+      fail-fast: false
+      matrix:
+        COMPILER:
+        - {
+            ID: gcc,
+            #C: gcc,
+            #CXX: g++,
+            C: gcc-13, # Используем GCC 13, так как 12 не поддерживает std::format
+            CXX: g++-13,
+          }
+        - {
+            ID: clang,
+            #C: clang,
+            #CXX: clang++,
+            C: clang-16,
+            CXX: clang++-16,
+          }
+        BUILD_TYPE:
+        - {
+            ID: dbg,
+            VALUE: Debug,
+          }
+        - {
+            ID: rel,
+            VALUE: Release,
+          }
+
+    name: 🐧-${{ matrix.COMPILER.ID }}-${{ matrix.BUILD_TYPE.ID }}
+
+    steps:
+    - name: Скачиваем репозиторий
+      uses: actions/checkout@v4
+      with:
+        path: repo # Папка, в которую будет скачан репозиторий
+        submodules: recursive # Движок тоже качаем
+
+    - name: Устанавливаем зависимости
+      run: |
+        sudo apt update
+        # Без libxrandr-dev не получится узнать список поддерживаемых разрешений
+        sudo apt install libgl1-mesa-dev libxrandr-dev
+
+        # Репозиторий Ubuntu содержит устаревшую версию Doxygen 1.9.1. Качаем собственную сборку
+        mkdir $HOME/programs
+        cd $HOME/programs
+        wget -q -O tmp.zip https://github.com/dviglo-tools/doxygen-builder/raw/main/doxygen_linux64.zip && unzip tmp.zip && rm tmp.zip
+        echo "$HOME/programs" >> $GITHUB_PATH
+
+    - name: Компилируем
+      run: |
+        #set -x # Echo commands
+        echo "Current dir: $PWD"
+
+        cmake repo -B build -G "Unix Makefiles" \
+          -D CMAKE_C_COMPILER=${{ matrix.COMPILER.C }} -D CMAKE_CXX_COMPILER=${{ matrix.COMPILER.CXX }} \
+          -D CMAKE_BUILD_TYPE=${{ matrix.BUILD_TYPE.VALUE }} \
+          -D DV_CTEST=1 
+
+        cmake --build build
+
+    - name: CTest
+      shell: bash {0} # Разрешаем перехват ошибок
+      run: |
+        xvfb-run ctest --test-dir build --timeout 60
+        EXIT_CODE=$? # Exit code of the previous command
+
+        if (( $EXIT_CODE != 0 )) 
+        then
+          echo "$(cat /home/runner/work/mini_games/mini_games/build/Testing/Temporary/LastTest.log)"
+          exit $EXIT_CODE
+        fi
