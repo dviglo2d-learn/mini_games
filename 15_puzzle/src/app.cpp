@@ -21,6 +21,7 @@ void App::setup()
 {
     engine_params::window_size = ivec2(720, 700);
     engine_params::window_title = "Пятнашки";
+    engine_params::vsync = -1;
 }
 
 void App::start()
@@ -28,7 +29,6 @@ void App::start()
     StrUtf8 base_path = get_base_path();
     sprite_batch_ = make_unique<SpriteBatch>();
     spritesheet_ = DV_TEXTURE_CACHE->get(base_path + "15_puzzle_data/textures/spritesheet.png");
-    r_20_font_ = make_unique<SpriteFont>(base_path + "samples_data/fonts/ubuntu-r_20_simple.fnt");
     my_font_ = make_unique<SpriteFont>(base_path + "15_puzzle_data/fonts/my_font.fnt");
     puzzle_logic_ = make_shared<PuzzleLogic>();
     puzzle_interface_ = make_shared<PuzzleInterface>(puzzle_logic_);
@@ -83,12 +83,8 @@ void App::on_mouse_button(const SDL_MouseButtonEvent& event_data)
     }
 }
 
-static StrUtf8 fps_text;
-
 void App::update(u64 ns)
 {
-    u64 fps = SDL_NS_PER_SECOND / ns;
-    fps_text = format("FPS: {}", fps);
 }
 
 void App::draw()
@@ -117,10 +113,6 @@ void App::draw()
 
     if (puzzle_logic_->check_win())
         sprite_batch_->draw_string("Победа!", my_font_.get(), vec2{200.f, 340.f});
-
-    // Рисуем счётчик ФПС с тенью
-    sprite_batch_->draw_string(fps_text, r_20_font_.get(), vec2{4.f, 1.f}, 0xFF000000);
-    sprite_batch_->draw_string(fps_text, r_20_font_.get(), vec2{3.f, 0.f}, 0xFFFFFFFF);
 
     // Выводим остаток накопленных спрайтов
     sprite_batch_->flush();

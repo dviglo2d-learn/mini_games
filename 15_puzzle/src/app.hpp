@@ -11,7 +11,6 @@ class App : public Application
 {
     Texture* spritesheet_;
     unique_ptr<SpriteBatch> sprite_batch_;
-    unique_ptr<SpriteFont> r_20_font_;
     unique_ptr<SpriteFont> my_font_;
     shared_ptr<PuzzleLogic> puzzle_logic_;
     shared_ptr<PuzzleInterface> puzzle_interface_;

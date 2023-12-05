@@ -22,7 +22,7 @@ target_link_libraries(${target_name} PRIVATE dviglo)
 dv_copy_shared_libs_to_bin_dir(${target_name} ${result_dir} copy_shared_libs_to_app_dir)
 
 # Список папок с ресурсами движка для копирования в result
-set(dir_names engine_data samples_data)
+set(dir_names engine_data)
 
 # Копируем папки с ресурсами движка в result, если нужно
 foreach(dir_name ${dir_names})
@@ -31,7 +31,7 @@ foreach(dir_name ${dir_names})
     endif()
 endforeach()
 
-# Копируем папку safe_data в result, если нужно
+# Копируем папку 15_puzzle_data в result, если нужно
 if(NOT EXISTS ${result_dir}/15_puzzle_data)
     dv_create_dir_link(${CMAKE_CURRENT_SOURCE_DIR}/15_puzzle_data ${result_dir}/15_puzzle_data)
 endif()
