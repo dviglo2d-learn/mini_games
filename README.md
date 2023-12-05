@@ -4,6 +4,8 @@
 
 Небольшие игры на [движке Dviglo2D](https://github.com/dviglo2d/dviglo2d).
 
+![](15_puzzle/screenshot_15.png)
+
 ## Сборка в Windows
 
 В пустой папке создайте и запустите батник:
