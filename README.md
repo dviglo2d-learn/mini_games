@@ -23,7 +23,7 @@ git clone https://github.com/dviglo2d/dviglo2d engine
 
 :: Так как в движке могут произойти изменения, ломающие обратную совместимость,
 :: то возвращаем состояние репозитория к определённой версии
-git -C engine reset --hard 878716178c51e247fac0f50178a510b20a35b6bb
+git -C engine reset --hard 3ba6edb5ca7eabc327467ae1843bec1759c63bfe
 
 :: Создаём проекты для Visual Studio 2022 в папке build_vs, используя конфиг CMakeLists.txt из папки repo
 cmake.exe repo -B build_vs -G "Visual Studio 17" -A x64
