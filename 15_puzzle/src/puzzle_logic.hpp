@@ -2,7 +2,7 @@
 
 #include <dviglo/common/primitive_types.hpp>
 
-#include <glm/glm.hpp>
+#include <glm/glm_wrapped.hpp>
 
 #include <array>
 
