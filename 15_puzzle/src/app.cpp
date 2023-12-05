@@ -20,6 +20,7 @@ App::App(const vector<StrUtf8>& args)
 void App::setup()
 {
     engine_params::window_size = ivec2(720, 700);
+    engine_params::window_title = "Пятнашки";
 }
 
 void App::start()
