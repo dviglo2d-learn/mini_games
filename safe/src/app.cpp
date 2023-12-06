@@ -13,10 +13,9 @@
 #include <iostream>
 
 using namespace glm;
-using namespace std;
 
 
-App::App(const std::vector<StrUtf8>& args)
+App::App(const vector<StrUtf8>& args)
     : Application(args)
 {
     cout << "Командная строка: " << join(args, " ") << endl;
@@ -47,17 +46,28 @@ void App::start()
 }
 
 static float rotation = 0.f;
-
-static StrUtf8 fps_text;
+static StrUtf8 fps_text = "FPS: ?";
 
 void App::update(u64 ns)
 {
+    static u64 frame_counter = 0;
+    static u64 time_counter = 0;
+
+    ++frame_counter;
+    time_counter += ns;
+
+    // Обновляем fps_text каждые пол секунды
+    if (time_counter >= SDL_NS_PER_SECOND / 2)
+    {
+        u64 fps = frame_counter * SDL_NS_PER_SECOND / time_counter;
+        fps_text = format("FPS: {}", fps);
+        frame_counter = 0;
+        time_counter = 0;
+    }
+
     rotation += ns * 0.000'000'000'1f;
     while (rotation >= 360.f)
         rotation -= 360.f;
-
-    u64 fps = SDL_NS_PER_SECOND / ns;
-    fps_text = format("FPS: {}", fps);
 }
 
 void App::draw()
@@ -67,14 +77,7 @@ void App::draw()
     glClearColor(1.0f, 0.3f, 0.3f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 
-    // Задаём треугольники по часовой стрелке
-    glEnable(GL_CULL_FACE);
-    glCullFace(GL_BACK);
-    glFrontFace(GL_CW);
-
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glBlendEquation(GL_FUNC_ADD);
+    sprite_batch_->prepare_ogl();
 
     sprite_batch_->triangle_.v0 = {{800.f, 0.f}, 0xFF00FF00};
     sprite_batch_->triangle_.v1 = {{800.f, 300.f}, 0xFF0000FF};

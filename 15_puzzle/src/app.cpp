@@ -95,15 +95,7 @@ void App::draw()
     glClearColor(0.f, 0.3f, 0.3f, 1.f);
     glClear(GL_COLOR_BUFFER_BIT);
 
-    // Задаём треугольники по часовой стрелке
-    glEnable(GL_CULL_FACE);
-    glCullFace(GL_BACK);
-    glFrontFace(GL_CW);
-
-    // Включаем альфа-смешение
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glBlendEquation(GL_FUNC_ADD);
+    sprite_batch_->prepare_ogl();
 
     // Рисуем игровое поле
     puzzle_interface_->draw(sprite_batch_.get());
