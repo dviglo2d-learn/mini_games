@@ -1,16 +1,11 @@
 #include "app.hpp"
 
-#include <dviglo/gl_utils/shader_cache.hpp>
 #include <dviglo/gl_utils/texture_cache.hpp>
 #include <dviglo/io/fs_base.hpp>
 #include <dviglo/main/engine_params.hpp>
 #include <dviglo/main/os_window.hpp>
 
-#include <glad/gl.h>
-#include <glm/glm_wrapped.hpp>
-
 #include <format>
-#include <iostream>
 
 using namespace glm;
 
@@ -18,17 +13,8 @@ using namespace glm;
 App::App(const vector<StrUtf8>& args)
     : Application(args)
 {
-    cout << "Командная строка: " << join(args, " ") << endl;
-
     log_path_ = get_pref_path("dviglo2d", "mini_games") + "letalka.log";
 }
-
-struct Vertex
-{
-    vec2 pos;
-    u32 color;
-    vec2 uv;
-};
 
 void App::setup()
 {
@@ -39,8 +25,6 @@ void App::setup()
 void App::start()
 {
     StrUtf8 base_path = get_base_path();
-    cout << "Папка программы: " << base_path << endl;
-
     texture_ = DV_TEXTURE_CACHE->get(base_path + "samples_data/textures/tile128.png");
     sprite_batch_ = make_unique<SpriteBatch>();
     r_20_font_ = make_unique<SpriteFont>(base_path + "samples_data/fonts/ubuntu-r_20_simple.fnt");
@@ -73,8 +57,6 @@ void App::update(u64 ns)
 
 void App::draw()
 {
-    ivec2 screen_size = DV_OS_WINDOW->size_in_pixels();
-
     glClearColor(1.0f, 0.3f, 0.3f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 
