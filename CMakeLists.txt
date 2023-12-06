@@ -22,4 +22,4 @@ file(MAKE_DIRECTORY ${result_dir})
 dv_set_bin_dir(${result_dir})
 
 add_subdirectory(15_puzzle)
-add_subdirectory(safe)
+add_subdirectory(letalka)

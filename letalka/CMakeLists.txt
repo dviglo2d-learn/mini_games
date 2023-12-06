@@ -1,5 +1,5 @@
 # Название таргета
-set(target_name safe)
+set(target_name letalka)
 
 # Создаём список файлов
 file(GLOB_RECURSE source_files src/*.cpp src/*.hpp)
@@ -31,9 +31,9 @@ foreach(dir_name ${dir_names})
     endif()
 endforeach()
 
-# Копируем папку safe_data в result, если нужно
-if(NOT EXISTS ${result_dir}/safe_data)
-    dv_create_dir_link(${CMAKE_CURRENT_SOURCE_DIR}/safe_data ${result_dir}/safe_data)
+# Копируем папку letalka_data в result, если нужно
+if(NOT EXISTS ${result_dir}/letalka_data)
+    dv_create_dir_link(${CMAKE_CURRENT_SOURCE_DIR}/letalka_data ${result_dir}/letalka_data)
 endif()
 
 # Заставляем VS отображать дерево каталогов

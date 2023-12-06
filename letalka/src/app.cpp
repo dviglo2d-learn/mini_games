@@ -20,7 +20,7 @@ App::App(const vector<StrUtf8>& args)
 {
     cout << "Командная строка: " << join(args, " ") << endl;
 
-    log_path_ = get_pref_path("dviglo2d", "mini_games") + "safe.log";
+    log_path_ = get_pref_path("dviglo2d", "mini_games") + "letalka.log";
 }
 
 struct Vertex
@@ -33,6 +33,7 @@ struct Vertex
 void App::setup()
 {
     engine_params::window_size = ivec2(900, 700);
+    engine_params::window_title = "Леталка";
 }
 
 void App::start()
