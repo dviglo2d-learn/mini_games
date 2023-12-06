@@ -1,12 +1,8 @@
 #include "app.hpp"
 
-#include <dviglo/gl_utils/shader_cache.hpp>
 #include <dviglo/gl_utils/texture_cache.hpp>
 #include <dviglo/io/fs_base.hpp>
 #include <dviglo/main/engine_params.hpp>
-#include <dviglo/main/os_window.hpp>
-
-#include <glad/gl.h>
 
 #include <format>
 
@@ -89,8 +85,6 @@ void App::update(u64 ns)
 
 void App::draw()
 {
-    ivec2 screen_size = DV_OS_WINDOW->size_in_pixels();
-
     // Закрашиваем фон
     glClearColor(0.f, 0.3f, 0.3f, 1.f);
     glClear(GL_COLOR_BUFFER_BIT);

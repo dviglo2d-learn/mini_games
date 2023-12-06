@@ -1,10 +1,8 @@
 #pragma once
 
-#include <dviglo/graphics/sprite_font.hpp>
 #include <dviglo/main/application.hpp>
 
 #include "puzzle_interface.hpp"
-#include "puzzle_logic.hpp"
 
 
 class App : public Application
