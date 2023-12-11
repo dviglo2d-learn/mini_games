@@ -1,9 +1,10 @@
 #include "app.hpp"
 
+#include "objects/spacecrafts/player.hpp"
+
 #include <dviglo/gl_utils/texture_cache.hpp>
 #include <dviglo/io/fs_base.hpp>
 #include <dviglo/main/engine_params.hpp>
-#include <dviglo/main/os_window.hpp>
 
 #include <format>
 
@@ -24,13 +25,45 @@ void App::setup()
 
 void App::start()
 {
+    SDL_SetRelativeMouseMode(SDL_TRUE);
+
     StrUtf8 base_path = get_base_path();
-    texture_ = DV_TEXTURE_CACHE->get(base_path + "samples_data/textures/tile128.png");
     sprite_batch_ = make_unique<SpriteBatch>();
     r_20_font_ = make_unique<SpriteFont>(base_path + "samples_data/fonts/ubuntu-r_20_simple.fnt");
+    world_ = make_unique<World>();
 }
 
-static float rotation = 0.f;
+void App::handle_sdl_event(const SDL_Event& event)
+{
+    Application::handle_sdl_event(event); // Реагируем на закрытие приложения
+
+    switch (event.type)
+    {
+    case SDL_EVENT_KEY_DOWN:
+    case SDL_EVENT_KEY_UP:
+        on_key(event.key);
+        break;
+
+    case SDL_EVENT_MOUSE_MOTION:
+        on_mouse_motion(event.motion);
+        break;
+    }
+}
+
+void App::on_key(const SDL_KeyboardEvent& event_data)
+{
+    if (event_data.type == SDL_EVENT_KEY_DOWN && event_data.repeat == false
+        && event_data.keysym.scancode == SDL_SCANCODE_ESCAPE)
+    {
+        should_exit_ = true;
+    }
+}
+
+void App::on_mouse_motion(const SDL_MouseMotionEvent& event_data)
+{
+    WORLD->player->on_mouse_motion(event_data);
+}
+
 static StrUtf8 fps_text = "FPS: ?";
 
 void App::update(u64 ns)
@@ -50,28 +83,17 @@ void App::update(u64 ns)
         time_counter = 0;
     }
 
-    rotation += ns * 0.000'000'000'1f;
-    while (rotation >= 360.f)
-        rotation -= 360.f;
+    WORLD->update(ns);
 }
 
 void App::draw()
 {
-    glClearColor(1.0f, 0.3f, 0.3f, 1.0f);
+    glClearColor(0.f, 0.f, 0.f, 0.f);
     glClear(GL_COLOR_BUFFER_BIT);
 
     sprite_batch_->prepare_ogl();
 
-    sprite_batch_->triangle_.v0 = {{800.f, 0.f}, 0xFF00FF00};
-    sprite_batch_->triangle_.v1 = {{800.f, 300.f}, 0xFF0000FF};
-    sprite_batch_->triangle_.v2 = {{0.f, 300.f}, 0xFFFFFFFF};
-    sprite_batch_->add_triangle();
-
-    sprite_batch_->set_shape_color(0xFFFF0000);
-    sprite_batch_->draw_triangle({400.f, 0.f}, {400.f, 600.f}, {0.f, 600.f});
-
-    sprite_batch_->draw_sprite(texture_, {100.f, 100.f});
-    sprite_batch_->draw_sprite(texture_, {500.f, 100.f}, nullptr, 0xFFFFFFFF, rotation);
+    WORLD->draw(sprite_batch_.get());
 
     sprite_batch_->draw_string(fps_text, r_20_font_.get(), vec2{4.f, 1.f}, 0xFF000000);
     sprite_batch_->draw_string(fps_text, r_20_font_.get(), vec2{3.f, 0.f}, 0xFFFFFFFF);
