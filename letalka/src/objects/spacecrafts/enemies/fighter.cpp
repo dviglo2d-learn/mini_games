@@ -11,6 +11,9 @@ Fighter::Fighter()
 
     // Просто движется вниз
     velocity = {0.f, 200.f};
+
+    // Начнёт стрелять через некоторое время после вылета на экран
+    shoot_delay = SDL_NS_PER_SECOND / 3;
 }
 
 void Fighter::update_ai(u64 ns)
@@ -18,22 +21,24 @@ void Fighter::update_ai(u64 ns)
     if (destroyed)
         return;
 
-    if (shoot_delay >= ns) // Безопасное вычитание, чтобы не было переполнения
-        shoot_delay -= ns;
-    else
-        shoot_delay = 0;
-
-    if (shoot_delay == 0 && is_inside_screen())
+    // Начнёт стрелять через некоторое время после вылета на экран
+    if (is_inside_screen())
     {
-        vec2 center = calc_center_pos();
-        vec2 player_center = PLAYER->calc_center_pos();
-        vec2 dir = normalize(player_center - center);
+        // Безопасное вычитание, чтобы не было переполнения
+        if (shoot_delay >= ns)
+            shoot_delay -= ns;
+        else
+            shoot_delay = 0;
 
-        // Создаём лазерный луч
-        shared_ptr<Laser> laser = make_shared<Laser>(LaserDir::down);
-        laser->pos = center;
-        WORLD->enemy_projectiles.push_back(laser);
+        if (shoot_delay == 0)
+        {
+            // Создаём лазерный луч
+            shared_ptr<Laser> laser = make_shared<Laser>(LaserDir::down);
+            vec2 center = calc_center_pos();
+            laser->pos = {center.x - laser->size.x / 2, center.y};
+            WORLD->enemy_projectiles.push_back(laser);
 
-        shoot_delay = SDL_NS_PER_SECOND;
+            shoot_delay = SDL_NS_PER_SECOND * 3 / 2;
+        }
     }
 }
