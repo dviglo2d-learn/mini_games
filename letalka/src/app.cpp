@@ -21,6 +21,7 @@ void App::setup()
 {
     engine_params::window_size = ivec2(900, 700);
     engine_params::window_title = "Леталка";
+    engine_params::vsync = -1;
 }
 
 void App::start()
@@ -63,26 +64,8 @@ void App::on_mouse_motion(const SDL_MouseMotionEvent& event_data)
 {
     WORLD->player->on_mouse_motion(event_data);
 }
-
-static StrUtf8 fps_text = "FPS: ?";
-
 void App::update(u64 ns)
 {
-    static u64 frame_counter = 0;
-    static u64 time_counter = 0;
-
-    ++frame_counter;
-    time_counter += ns;
-
-    // Обновляем fps_text каждые пол секунды
-    if (time_counter >= SDL_NS_PER_SECOND / 2)
-    {
-        u64 fps = frame_counter * SDL_NS_PER_SECOND / time_counter;
-        fps_text = format("FPS: {}", fps);
-        frame_counter = 0;
-        time_counter = 0;
-    }
-
     WORLD->update(ns);
 }
 
@@ -95,8 +78,10 @@ void App::draw()
 
     WORLD->draw(sprite_batch_.get());
 
-    sprite_batch_->draw_string(fps_text, r_20_font_.get(), vec2{4.f, 1.f}, 0xFF000000);
-    sprite_batch_->draw_string(fps_text, r_20_font_.get(), vec2{3.f, 0.f}, 0xFFFFFFFF);
+    StrUtf8 score_text = "Счёт: " + to_string(PLAYER->score);
+
+    sprite_batch_->draw_string(score_text, r_20_font_.get(), vec2{4.f, 1.f}, 0xFF000000);
+    sprite_batch_->draw_string(score_text, r_20_font_.get(), vec2{3.f, 0.f}, 0xFFFFFFFF);
 
     sprite_batch_->flush();
 }

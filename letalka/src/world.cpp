@@ -148,6 +148,7 @@ void World::update(u64 ns)
             {
                 enemy->destroyed = true;
                 proj->destroyed = true;
+                ++PLAYER->score;
             }
         }
     }

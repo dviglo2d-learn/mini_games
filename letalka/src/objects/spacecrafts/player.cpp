@@ -25,6 +25,7 @@ Player::~Player()
 void Player::init()
 {
     shoot_delay = 0;
+    score = 0;
 
     // Размещаем игрока в центре низа экрана
     float half_width = size.x / 2;

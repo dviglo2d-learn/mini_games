@@ -15,6 +15,8 @@ private:
 public:
     static Player* instance() { return instance_; }
 
+    i32 score;
+
     Player();
     ~Player() override;
 
