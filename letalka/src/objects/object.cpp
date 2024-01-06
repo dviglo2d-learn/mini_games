@@ -2,8 +2,6 @@
 
 #include <dviglo/main/os_window.hpp>
 
-#include <iostream> // TODO: Удалить
-
 
 vec2 Object::calc_center_pos()
 {
@@ -61,7 +59,6 @@ void Object::update_pos(u64 ns)
         || pos.x > (float)screen_size.x + border_size || pos.y > (float)screen_size.y + border_size)
     {
         destroyed = true;
-        std::cout << "destroyed\n"; // TODO: Удалить
     }
 }
 

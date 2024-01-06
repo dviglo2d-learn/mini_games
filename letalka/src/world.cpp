@@ -10,7 +10,6 @@
 #include <dviglo/io/fs_base.hpp>
 #include <dviglo/main/os_window.hpp>
 
-#include <iostream> // TODO: Удалить
 #include <random>
 
 
