@@ -1,6 +1,7 @@
 #include "drone.hpp"
 
 #include "../player.hpp"
+#include "../../../world.hpp"
 
 #include <SDL3/SDL.h>
 
@@ -34,4 +35,17 @@ void Drone::update_ai(u64 ns)
     {
         velocity = {0.f, drone_speed};
     }
+}
+
+void Drone::draw(SpriteBatch* sprite_batch)
+{
+    // Область спрайта в текстуре
+    Rect uv{{108.f, 2.f}, {108.f + 64.f, 2.f + 64.f}};
+    // Размер спрайта в текстуре
+    vec2 sprite_size = uv.max - uv.min;
+    // Разница между размером спрайта и размером коллайдера
+    vec2 diff = sprite_size - size;
+    // Центрируем спрайт относительно коллайдера
+    vec2 sprite_offset = diff * 0.5f;
+    sprite_batch->draw_sprite(WORLD->spritesheet, pos - sprite_offset, &uv);
 }

@@ -25,7 +25,9 @@ public:
     static World* instance() { return instance_; }
 
     /// Рисовать ли коллайдеры объектов
-    bool debug_draw = true;
+    bool debug_draw = false;
+
+    Texture* spritesheet;
 
     /// Задержка перед созданием очередной пачки врагов
     u64 spawn_enemy_delay;

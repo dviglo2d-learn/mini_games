@@ -11,7 +11,7 @@ using namespace std;
 
 Gunship::Gunship(bool left)
 {
-    size = {30.f, 30.f};
+    size = {50.f, 50.f};
 
     if (left) // Появляется слева - движемся вправо
         velocity = {300.f, 0.f};
@@ -50,4 +50,17 @@ void Gunship::update_ai(u64 ns)
             shoot_delay = SDL_NS_PER_SECOND * 2;
         }
     }
+}
+
+void Gunship::draw(SpriteBatch* sprite_batch)
+{
+    // Область спрайта в текстуре
+    Rect uv{{269.f, 7.f}, {269.f + 64.f, 7.f + 64.f}};
+    // Размер спрайта в текстуре
+    vec2 sprite_size = uv.max - uv.min;
+    // Разница между размером спрайта и размером коллайдера
+    vec2 diff = sprite_size - size;
+    // Центрируем спрайт относительно коллайдера
+    vec2 sprite_offset = diff * 0.5f;
+    sprite_batch->draw_sprite(WORLD->spritesheet, pos - sprite_offset, &uv);
 }

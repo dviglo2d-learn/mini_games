@@ -10,4 +10,5 @@ public:
     Fighter();
 
     void update_ai(u64 ns) override;
+    void draw(SpriteBatch* sprite_batch) override;
 };

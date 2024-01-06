@@ -15,4 +15,6 @@ class Laser : public Projectile
 {
 public:
     Laser(LaserDir laser_dir);
+
+    void draw(SpriteBatch* sprite_batch) override;
 };

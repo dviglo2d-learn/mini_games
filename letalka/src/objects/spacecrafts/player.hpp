@@ -17,6 +17,9 @@ public:
 
     i32 score;
 
+    /// Неуязвимость персонажа (в целях отладки)
+    bool invulnerable = false;
+
     Player();
     ~Player() override;
 
@@ -28,6 +31,8 @@ public:
 
     /// Стреляет, если нужно
     void update_guns(u64 ns);
+
+    void draw(SpriteBatch* sprite_batch) override;
 };
 
 #define PLAYER (Player::instance())

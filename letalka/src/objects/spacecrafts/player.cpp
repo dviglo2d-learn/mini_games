@@ -10,7 +10,7 @@ Player::Player()
 {
     assert(!instance_);
 
-    size = {60.f, 40.f};
+    size = {80.f, 60.f};
     debug_color = 0x9000FF00;
     init();
 
@@ -69,15 +69,28 @@ void Player::update_guns(u64 ns)
     {
         // Создаём два лазерных луча
         shared_ptr<Laser> left_laser = make_shared<Laser>(LaserDir::up);
-        left_laser->pos = pos;
+        left_laser->pos = pos + vec2(6.f, -12.f);
 
         shared_ptr<Laser> right_laser = make_shared<Laser>(LaserDir::up);
-        right_laser->pos.x = pos.x + size.x - right_laser->size.x;
-        right_laser->pos.y = pos.y;
+        right_laser->pos.x = pos.x + size.x - right_laser->size.x - 6.f;
+        right_laser->pos.y = pos.y - 12.f;
 
         WORLD->player_projectiles.push_back(left_laser);
         WORLD->player_projectiles.push_back(right_laser);
 
         shoot_delay = SDL_NS_PER_SECOND / 2;
     }
+}
+
+void Player::draw(SpriteBatch* sprite_batch)
+{
+    // Область спрайта в текстуре
+    Rect uv{{0.f, 0.f}, {100.f, 100.f}};
+    // Размер спрайта в текстуре
+    vec2 sprite_size = uv.max - uv.min;
+    // Разница между размером спрайта и размером коллайдера
+    vec2 diff = sprite_size - size;
+    // Центрируем спрайт относительно коллайдера и смещаем вверх
+    vec2 sprite_offset = diff * 0.5f + vec2(0.f, 10.f);
+    sprite_batch->draw_sprite(WORLD->spritesheet, pos - sprite_offset, &uv);
 }

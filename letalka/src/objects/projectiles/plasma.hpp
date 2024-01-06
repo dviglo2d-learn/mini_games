@@ -8,4 +8,6 @@ class Plasma : public Projectile
 {
 public:
     Plasma(vec2 direction);
+
+    void draw(SpriteBatch* sprite_batch) override;
 };

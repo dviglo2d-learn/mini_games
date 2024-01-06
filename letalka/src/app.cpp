@@ -58,6 +58,18 @@ void App::on_key(const SDL_KeyboardEvent& event_data)
     {
         should_exit_ = true;
     }
+
+    if (event_data.type == SDL_EVENT_KEY_DOWN && event_data.repeat == false
+        && event_data.keysym.scancode == SDL_SCANCODE_F2)
+    {
+        WORLD->debug_draw = !WORLD->debug_draw;
+    }
+
+    if (event_data.type == SDL_EVENT_KEY_DOWN && event_data.repeat == false
+        && event_data.keysym.scancode == SDL_SCANCODE_F3)
+    {
+        PLAYER->invulnerable = !PLAYER->invulnerable;
+    }
 }
 
 void App::on_mouse_motion(const SDL_MouseMotionEvent& event_data)

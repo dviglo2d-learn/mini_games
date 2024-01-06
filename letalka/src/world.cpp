@@ -6,6 +6,8 @@
 #include "objects/spacecrafts/enemies/gunship.hpp"
 #include "objects/spacecrafts/player.hpp"
 
+#include <dviglo/gl_utils/texture_cache.hpp>
+#include <dviglo/io/fs_base.hpp>
 #include <dviglo/main/os_window.hpp>
 
 #include <iostream> // TODO: Удалить
@@ -21,6 +23,8 @@ World::World()
 {
     assert(!instance_);
 
+    StrUtf8 base_path = get_base_path();
+    spritesheet = DV_TEXTURE_CACHE->get(base_path + "letalka_data/textures/spritesheet.png");
     player = make_unique<Player>();
     new_game();
 
@@ -153,18 +157,21 @@ void World::update(u64 ns)
         }
     }
 
-    // Ищем столкновения снарядов противника и корабля игрока
-    for (shared_ptr<Projectile> proj : enemy_projectiles)
+    if (!PLAYER->invulnerable)
     {
-        if (proj->is_collide(PLAYER))
-            new_game();
-    }
+        // Ищем столкновения снарядов противника и корабля игрока
+        for (shared_ptr<Projectile> proj : enemy_projectiles)
+        {
+            if (proj->is_collide(PLAYER))
+                new_game();
+        }
 
-    // Ищем столкновения корбаля игрока с кораблями противника
-    for (shared_ptr<Enemy> enemy : enemies)
-    {
-        if (enemy->is_collide(PLAYER))
-            new_game();
+        // Ищем столкновения корбаля игрока с кораблями противника
+        for (shared_ptr<Enemy> enemy : enemies)
+        {
+            if (enemy->is_collide(PLAYER))
+                new_game();
+        }
     }
 
     // Чистим списки от уничтоженных объектов
@@ -175,16 +182,28 @@ void World::update(u64 ns)
 
 void World::draw(SpriteBatch* sprite_batch)
 {
-    for (shared_ptr<Enemy> obj : enemies)
-        obj->draw_debug(sprite_batch);
-
-    player->draw_debug(sprite_batch);
-
-    // Снаряды рисуем поверх кораблей TODO: после отладки пусть будут внизу
-
     for (shared_ptr<Projectile> obj : player_projectiles)
-        obj->draw_debug(sprite_batch);
+        obj->draw(sprite_batch);
 
     for (shared_ptr<Projectile> obj : enemy_projectiles)
-        obj->draw_debug(sprite_batch);
+        obj->draw(sprite_batch);
+
+    for (shared_ptr<Enemy> obj : enemies)
+        obj->draw(sprite_batch);
+
+    player->draw(sprite_batch);
+
+    if (debug_draw)
+    {
+        for (shared_ptr<Projectile> obj : player_projectiles)
+            obj->draw_debug(sprite_batch);
+
+        for (shared_ptr<Projectile> obj : enemy_projectiles)
+            obj->draw_debug(sprite_batch);
+
+        for (shared_ptr<Enemy> obj : enemies)
+            obj->draw_debug(sprite_batch);
+
+        player->draw_debug(sprite_batch);
+    }
 }
