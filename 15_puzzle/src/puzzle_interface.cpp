@@ -1,7 +1,7 @@
 #include "puzzle_interface.hpp"
 
+#include <dviglo/fs/fs_base.hpp>
 #include <dviglo/gl_utils/texture_cache.hpp>
-#include <dviglo/io/fs_base.hpp>
 
 
 /// Ширина и высота текстуры коробки в пикселях

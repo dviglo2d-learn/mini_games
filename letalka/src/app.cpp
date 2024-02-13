@@ -2,8 +2,8 @@
 
 #include "objects/spacecrafts/player.hpp"
 
+#include <dviglo/fs/fs_base.hpp>
 #include <dviglo/gl_utils/texture_cache.hpp>
-#include <dviglo/io/fs_base.hpp>
 #include <dviglo/main/engine_params.hpp>
 
 #include <format>

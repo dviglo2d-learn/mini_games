@@ -7,7 +7,7 @@
 
 class App : public Application
 {
-    Texture* spritesheet_;
+    Texture* spritesheet_ = nullptr;
     unique_ptr<SpriteBatch> sprite_batch_;
     unique_ptr<SpriteFont> my_font_;
     shared_ptr<PuzzleLogic> puzzle_logic_;

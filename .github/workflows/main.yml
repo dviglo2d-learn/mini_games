@@ -59,7 +59,7 @@ jobs:
 
     - name: Скачиваем репозиторий
       # https://github.com/actions/checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         fetch-depth: 0
         path: repo # Папка, в которую будет скачан репозиторий
@@ -68,7 +68,7 @@ jobs:
       shell: bash
       run: |
         git clone https://github.com/dviglo2d/dviglo2d engine
-        git -C engine reset --hard cace521ff145a0020b291da4e98a9402eaf1b397
+        git -C engine reset --hard 0c62d2e9231a66b94a3cdb9d5c6142b23f22cf1d
 
     - name: Генерируем проекты
       shell: bash
@@ -179,13 +179,13 @@ jobs:
 
     steps:
     - name: Скачиваем репозиторий
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with: { path: "repo" }
 
     - name: Скачиваем движок
       run: |
         git clone https://github.com/dviglo2d/dviglo2d engine
-        git -C engine reset --hard cace521ff145a0020b291da4e98a9402eaf1b397
+        git -C engine reset --hard 0c62d2e9231a66b94a3cdb9d5c6142b23f22cf1d
 
     - name: Устанавливаем зависимости
       run: |

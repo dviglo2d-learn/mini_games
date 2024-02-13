@@ -6,8 +6,8 @@
 #include "objects/spacecrafts/enemies/gunship.hpp"
 #include "objects/spacecrafts/player.hpp"
 
+#include <dviglo/fs/fs_base.hpp>
 #include <dviglo/gl_utils/texture_cache.hpp>
-#include <dviglo/io/fs_base.hpp>
 #include <dviglo/main/os_window.hpp>
 
 #include <random>
