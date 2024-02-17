@@ -55,9 +55,9 @@ void Gunship::update_ai(u64 ns)
 void Gunship::draw(SpriteBatch* sprite_batch)
 {
     // Область спрайта в текстуре
-    Rect uv{{269.f, 7.f}, {269.f + 64.f, 7.f + 64.f}};
+    Rect uv{{269.f, 7.f}, {64.f, 64.f}};
     // Размер спрайта в текстуре
-    vec2 sprite_size = uv.max - uv.min;
+    vec2 sprite_size = uv.size;
     // Разница между размером спрайта и размером коллайдера
     vec2 diff = sprite_size - size;
     // Центрируем спрайт относительно коллайдера

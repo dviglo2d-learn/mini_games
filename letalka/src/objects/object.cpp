@@ -68,5 +68,5 @@ void Object::draw_debug(SpriteBatch* sprite_batch)
         return;
 
     sprite_batch->set_shape_color(debug_color);
-    sprite_batch->draw_rect({pos, pos + size});
+    sprite_batch->draw_rect({pos, size});
 }

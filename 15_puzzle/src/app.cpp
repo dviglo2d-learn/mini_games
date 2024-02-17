@@ -58,7 +58,7 @@ void App::on_key(const SDL_KeyboardEvent& event_data)
 }
 
 static constexpr vec2 new_game_size{238, 59}; // Размер кнопки "Новая игра"
-static const Rect new_game_uv{{532, 17}, vec2(532, 17) + new_game_size}; // Участок текстуры с кнопкой
+static const Rect new_game_uv{{532, 17}, new_game_size}; // Участок текстуры с кнопкой
 static constexpr vec2 new_game_pos{472, 10}; // Позиция кнопки на экране
 
 void App::on_mouse_button(const SDL_MouseButtonEvent& event_data)

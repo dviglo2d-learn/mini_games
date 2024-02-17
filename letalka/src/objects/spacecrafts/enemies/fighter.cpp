@@ -46,9 +46,9 @@ void Fighter::update_ai(u64 ns)
 void Fighter::draw(SpriteBatch* sprite_batch)
 {
     // Область спрайта в текстуре
-    Rect uv{{182.f, 6.f}, {182.f + 74.f, 6.f + 64.f}};
+    Rect uv{{182.f, 6.f}, {74.f, 64.f}};
     // Размер спрайта в текстуре
-    vec2 sprite_size = uv.max - uv.min;
+    vec2 sprite_size = uv.size;
     // Разница между размером спрайта и размером коллайдера
     vec2 diff = sprite_size - size;
     // Центрируем спрайт относительно коллайдера и смещаем вверх

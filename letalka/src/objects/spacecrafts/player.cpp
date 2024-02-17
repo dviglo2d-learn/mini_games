@@ -87,7 +87,7 @@ void Player::draw(SpriteBatch* sprite_batch)
     // Область спрайта в текстуре
     Rect uv{{0.f, 0.f}, {100.f, 100.f}};
     // Размер спрайта в текстуре
-    vec2 sprite_size = uv.max - uv.min;
+    vec2 sprite_size = uv.size;
     // Разница между размером спрайта и размером коллайдера
     vec2 diff = sprite_size - size;
     // Центрируем спрайт относительно коллайдера и смещаем вверх

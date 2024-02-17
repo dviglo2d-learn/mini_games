@@ -40,9 +40,9 @@ void Drone::update_ai(u64 ns)
 void Drone::draw(SpriteBatch* sprite_batch)
 {
     // Область спрайта в текстуре
-    Rect uv{{108.f, 2.f}, {108.f + 64.f, 2.f + 64.f}};
+    Rect uv{{108.f, 2.f}, {64.f, 64.f}};
     // Размер спрайта в текстуре
-    vec2 sprite_size = uv.max - uv.min;
+    vec2 sprite_size = uv.size;
     // Разница между размером спрайта и размером коллайдера
     vec2 diff = sprite_size - size;
     // Центрируем спрайт относительно коллайдера

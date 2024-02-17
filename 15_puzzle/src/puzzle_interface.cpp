@@ -32,7 +32,7 @@ static Rect calc_tile_uv(u8 value)
     float u = 3.f + index_x * tile_size + 2.f * index_x; // Левая граница костяшки
     float v = 514.f + index_y * tile_size + 2.f * index_y; // Верхняя граница костяшки
 
-    return {{u, v}, {u + tile_size, v + tile_size}}; // Правая и нижняя граница включаются в Rect
+    return {{u, v}, {tile_size, tile_size}}; // Правая и нижняя граница включаются в Rect
 }
 
 PuzzleInterface::PuzzleInterface(weak_ptr<PuzzleLogic> logic)
