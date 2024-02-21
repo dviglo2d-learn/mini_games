@@ -56,6 +56,9 @@ void World::new_game()
 
 void World::spawn_drones()
 {
+    ivec2 screen_size;
+    SDL_GetWindowSizeInPixels(DV_OS_WINDOW->window(), &screen_size.x, &screen_size.y);
+
     // Дрон слева
     shared_ptr<Drone> enemy = make_shared<Drone>();
     enemy->pos = {-enemy->size.x , 100.f};
@@ -63,14 +66,14 @@ void World::spawn_drones()
 
     // Дрон справа
     enemy = make_shared<Drone>();
-    ivec2 screen_size = DV_OS_WINDOW->size_in_pixels();
     enemy->pos = {(float)screen_size.x , 100.f};
     enemies.push_back(enemy);
 }
 
 void World::spawn_fighters()
 {
-    ivec2 screen_size = DV_OS_WINDOW->size_in_pixels();
+    ivec2 screen_size;
+    SDL_GetWindowSizeInPixels(DV_OS_WINDOW->window(), &screen_size.x, &screen_size.y);
 
     // Истребитель за верхней границей экрана
     shared_ptr<Fighter> enemy = make_shared<Fighter>();
@@ -89,7 +92,8 @@ void World::spawn_fighters()
 
 void World::spawn_gunships()
 {
-    ivec2 screen_size = DV_OS_WINDOW->size_in_pixels();
+    ivec2 screen_size;
+    SDL_GetWindowSizeInPixels(DV_OS_WINDOW->window(), &screen_size.x, &screen_size.y);
 
     // Ганшип слева
     shared_ptr<Gunship> enemy = make_shared<Gunship>(true);

@@ -29,7 +29,8 @@ void Player::init()
 
     // Размещаем игрока в центре низа экрана
     float half_width = size.x / 2;
-    ivec2 screen_size = DV_OS_WINDOW->size_in_pixels();
+    ivec2 screen_size;
+    SDL_GetWindowSizeInPixels(DV_OS_WINDOW->window(), &screen_size.x, &screen_size.y);
     float half_screen_width = screen_size.x * 0.5f;
     pos = {half_screen_width - half_width, (float)screen_size.y - size.y - 10.f};
 }
@@ -40,7 +41,8 @@ void Player::on_mouse_motion(const SDL_MouseMotionEvent& event_data)
     pos += delta;
 
     // Не позволяем кораблю персонажа выходить за границы экрана
-    ivec2 screen_size = DV_OS_WINDOW->size_in_pixels();
+    ivec2 screen_size;
+    SDL_GetWindowSizeInPixels(DV_OS_WINDOW->window(), &screen_size.x, &screen_size.y);
 
     if (pos.x < 0.f)
         pos.x = 0.f;
