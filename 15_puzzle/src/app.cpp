@@ -10,11 +10,11 @@
 App::App(const vector<StrUtf8>& args)
     : Application(args)
 {
-    log_path_ = get_pref_path("dviglo2d", "mini_games") + "15_puzzle.log";
 }
 
 void App::setup()
 {
+    engine_params::log_path = get_pref_path("dviglo2d", "mini_games") + "15_puzzle.log";
     engine_params::window_size = ivec2(720, 700);
     engine_params::window_title = "Пятнашки";
     engine_params::vsync = -1;

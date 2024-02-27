@@ -14,11 +14,11 @@ using namespace glm;
 App::App(const vector<StrUtf8>& args)
     : Application(args)
 {
-    log_path_ = get_pref_path("dviglo2d", "mini_games") + "letalka.log";
 }
 
 void App::setup()
 {
+    engine_params::log_path = get_pref_path("dviglo2d", "mini_games") + "letalka.log";
     engine_params::window_size = ivec2(900, 700);
     engine_params::window_title = "Леталка";
     engine_params::vsync = -1;
