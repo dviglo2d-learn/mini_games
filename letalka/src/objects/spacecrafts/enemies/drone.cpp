@@ -18,13 +18,13 @@ void Drone::update_ai(u64 ns)
 
     lifetime += ns;
 
-    constexpr float drone_speed = 100.f;
+    constexpr f32 drone_speed = 100.f;
 
     // Две секунды наводится на игрока по горизонтали
     if (lifetime < SDL_NS_PER_SECOND * 2)
     {
-        float drone_center_x = calc_center_pos().x;
-        float player_center_x = PLAYER->calc_center_pos().x;
+        f32 drone_center_x = calc_center_pos().x;
+        f32 player_center_x = PLAYER->calc_center_pos().x;
 
         if (drone_center_x < player_center_x)
             velocity = {drone_speed, 0.f};

@@ -28,11 +28,11 @@ void Player::init()
     score = 0;
 
     // Размещаем игрока в центре низа экрана
-    float half_width = size.x / 2;
+    f32 half_width = size.x / 2;
     ivec2 screen_size;
     SDL_GetWindowSizeInPixels(DV_OS_WINDOW->window(), &screen_size.x, &screen_size.y);
-    float half_screen_width = screen_size.x * 0.5f;
-    pos = {half_screen_width - half_width, (float)screen_size.y - size.y - 10.f};
+    f32 half_screen_width = screen_size.x * 0.5f;
+    pos = {half_screen_width - half_width, (f32)screen_size.y - size.y - 10.f};
 }
 
 void Player::on_mouse_motion(const SDL_MouseMotionEvent& event_data)
@@ -50,11 +50,11 @@ void Player::on_mouse_motion(const SDL_MouseMotionEvent& event_data)
     if (pos.y < 0.f)
         pos.y = 0.f;
 
-    if (pos.x > (float)screen_size.x - size.x)
-        pos.x = (float)screen_size.x - size.x;
+    if (pos.x > (f32)screen_size.x - size.x)
+        pos.x = (f32)screen_size.x - size.x;
 
-    if (pos.y > (float)screen_size.y - size.y)
-        pos.y = (float)screen_size.y - size.y;
+    if (pos.y > (f32)screen_size.y - size.y)
+        pos.y = (f32)screen_size.y - size.y;
 }
 
 void Player::update_guns(u64 ns)
@@ -64,7 +64,7 @@ void Player::update_guns(u64 ns)
     else
         shoot_delay = 0;
 
-    float mouse_x, mouse_y;
+    f32 mouse_x, mouse_y;
     Uint32 state = SDL_GetMouseState(&mouse_x, &mouse_x); // TODO: Удалить
 
     if (shoot_delay == 0 && state & SDL_BUTTON(1))

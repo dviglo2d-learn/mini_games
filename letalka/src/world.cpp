@@ -66,7 +66,7 @@ void World::spawn_drones()
 
     // Дрон справа
     enemy = make_shared<Drone>();
-    enemy->pos = {(float)screen_size.x , 100.f};
+    enemy->pos = {(f32)screen_size.x , 100.f};
     enemies.push_back(enemy);
 }
 
@@ -77,15 +77,15 @@ void World::spawn_fighters()
 
     // Истребитель за верхней границей экрана
     shared_ptr<Fighter> enemy = make_shared<Fighter>();
-    float half_width = enemy->size.x * 0.5f;
+    f32 half_width = enemy->size.x * 0.5f;
     uniform_int_distribution<> distrib((i32)half_width, screen_size.x - (i32)half_width);
-    float enemy_center_x = (float)distrib(rand_generator);
+    f32 enemy_center_x = (f32)distrib(rand_generator);
     enemy->pos = {enemy_center_x - half_width, -enemy->size.y};
     enemies.push_back(enemy);
 
     // Второй истребитель выше первого и появится позже
     enemy = make_shared<Fighter>();
-    enemy_center_x = (float)distrib(rand_generator);
+    enemy_center_x = (f32)distrib(rand_generator);
     enemy->pos = {enemy_center_x - half_width, -enemy->size.y * 3};
     enemies.push_back(enemy);
 }
@@ -98,14 +98,14 @@ void World::spawn_gunships()
     // Ганшип слева
     shared_ptr<Gunship> enemy = make_shared<Gunship>(true);
     uniform_int_distribution<> distrib(100, 600);
-    float enemy_y = (float)distrib(rand_generator);
+    f32 enemy_y = (f32)distrib(rand_generator);
     enemy->pos = {-enemy->size.x, enemy_y};
     enemies.push_back(enemy);
 
     // Ганшип справа
     enemy = make_shared<Gunship>(false);
-    enemy_y = (float)distrib(rand_generator);
-    enemy->pos = {(float)screen_size.x, enemy_y};
+    enemy_y = (f32)distrib(rand_generator);
+    enemy->pos = {(f32)screen_size.x, enemy_y};
     enemies.push_back(enemy);
 }
 

@@ -16,7 +16,7 @@ bool Object::is_inside_screen()
     ivec2 screen_size;
     SDL_GetWindowSizeInPixels(DV_OS_WINDOW->window(), &screen_size.x, &screen_size.y);
 
-    if (pos.x > (float)screen_size.x - size.x || pos.y > (float)screen_size.y - size.y)
+    if (pos.x > (f32)screen_size.x - size.x || pos.y > (f32)screen_size.y - size.y)
         return false;
 
     return true;
@@ -44,7 +44,7 @@ void Object::update_pos(u64 ns)
         return;
 
     // Двигаем объект
-    float seconds = (float)ns / SDL_NS_PER_SECOND;
+    f32 seconds = (f32)ns / SDL_NS_PER_SECOND;
     pos += velocity * seconds;
 
     // Уничтожаем корабли и снаряды, которые находятся далеко за пределами экрана.
@@ -55,10 +55,10 @@ void Object::update_pos(u64 ns)
     SDL_GetWindowSizeInPixels(DV_OS_WINDOW->window(), &screen_size.x, &screen_size.y);
 
     // Область, в которой не будут уничтожаться объекты, больше области экрана
-    const float border_size = 500.f;
+    const f32 border_size = 500.f;
 
     if (pos.x + size.x < -border_size || pos.y + size.y < -border_size
-        || pos.x > (float)screen_size.x + border_size || pos.y > (float)screen_size.y + border_size)
+        || pos.x > (f32)screen_size.x + border_size || pos.y > (f32)screen_size.y + border_size)
     {
         destroyed = true;
     }
