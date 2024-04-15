@@ -4,7 +4,7 @@
 #include <dviglo/graphics/sprite_batch.hpp>
 #include <dviglo/math/rect.hpp>
 
-#include <glm/glm_wrapped.hpp>
+#include <glm/glm.hpp>
 
 using namespace dviglo;
 using namespace glm;
