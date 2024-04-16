@@ -22,4 +22,5 @@ file(MAKE_DIRECTORY ${result_dir})
 dv_set_bin_dir(${result_dir})
 
 add_subdirectory(15_puzzle)
+add_subdirectory(clicker)
 add_subdirectory(letalka)
