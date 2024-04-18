@@ -3,7 +3,7 @@ set(engine_dir "${CMAKE_SOURCE_DIR}/../engine")
 
 # Указываем минимальную версию CMake
 include(${engine_dir}/cmake/cmake_min_version.cmake)
-cmake_minimum_required(VERSION ${DV_CMAKE_MIN_VERSION})
+cmake_minimum_required(VERSION ${dv_cmake_min_version})
 
 # Название проекта
 project("mini games")

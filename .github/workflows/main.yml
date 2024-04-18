@@ -68,7 +68,7 @@ jobs:
       shell: bash
       run: |
         git clone https://github.com/dviglo2d/dviglo2d engine
-        git -C engine reset --hard be7d5185f741241fa40f80d00eae5e543fd4ddf4
+        git -C engine reset --hard d8432f5f357c28e8656cb07a2dc6300c05d4b6fa
 
     - name: Генерируем проекты
       shell: bash
@@ -185,7 +185,7 @@ jobs:
     - name: Скачиваем движок
       run: |
         git clone https://github.com/dviglo2d/dviglo2d engine
-        git -C engine reset --hard be7d5185f741241fa40f80d00eae5e543fd4ddf4
+        git -C engine reset --hard d8432f5f357c28e8656cb07a2dc6300c05d4b6fa
 
     - name: Устанавливаем зависимости
       run: |
