@@ -32,10 +32,6 @@ void App::start()
 
 bool App::handle_sdl_event(const SDL_Event& event)
 {
-    // Реагируем на закрытие приложения
-    if (Application::handle_sdl_event(event))
-        return true;
-
     switch (event.type)
     {
     case SDL_EVENT_KEY_DOWN:
@@ -49,7 +45,8 @@ bool App::handle_sdl_event(const SDL_Event& event)
         return true;
 
     default:
-        return false;
+        // Реагируем на закрытие приложения и изменение размера окна
+        return Application::handle_sdl_event(event);
     }
 }
 
