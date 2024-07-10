@@ -68,7 +68,7 @@ jobs:
       shell: bash
       run: |
         git clone https://github.com/dviglo2d/dviglo2d engine
-        git -C engine reset --hard f89850cc36fba101a1e0c2985b21cb55da628dd3
+        git -C engine reset --hard 3c757a51f903e0c7f52e63879938654a7e8846d1
 
     - name: Генерируем проекты
       shell: bash
@@ -145,7 +145,7 @@ jobs:
         fi
 
   Linux_Native:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
 
     strategy:
       fail-fast: false
@@ -162,8 +162,8 @@ jobs:
             ID: clang,
             #C: clang,
             #CXX: clang++,
-            C: clang-13,
-            CXX: clang++-13,
+            C: clang-16,
+            CXX: clang++-16,
           }
         BUILD_TYPE:
         - {
@@ -185,7 +185,7 @@ jobs:
     - name: Скачиваем движок
       run: |
         git clone https://github.com/dviglo2d/dviglo2d engine
-        git -C engine reset --hard f89850cc36fba101a1e0c2985b21cb55da628dd3
+        git -C engine reset --hard 3c757a51f903e0c7f52e63879938654a7e8846d1
 
     - name: Устанавливаем зависимости
       run: |

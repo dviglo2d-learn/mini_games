@@ -56,19 +56,19 @@ bool App::handle_sdl_event(const SDL_Event& event)
 void App::on_key(const SDL_KeyboardEvent& event_data)
 {
     if (event_data.type == SDL_EVENT_KEY_DOWN && event_data.repeat == false
-        && event_data.keysym.scancode == SDL_SCANCODE_ESCAPE)
+        && event_data.scancode == SDL_SCANCODE_ESCAPE)
     {
         should_exit_ = true;
     }
 
     if (event_data.type == SDL_EVENT_KEY_DOWN && event_data.repeat == false
-        && event_data.keysym.scancode == SDL_SCANCODE_F2)
+        && event_data.scancode == SDL_SCANCODE_F2)
     {
         WORLD->debug_draw = !WORLD->debug_draw;
     }
 
     if (event_data.type == SDL_EVENT_KEY_DOWN && event_data.repeat == false
-        && event_data.keysym.scancode == SDL_SCANCODE_F3)
+        && event_data.scancode == SDL_SCANCODE_F3)
     {
         PLAYER->invulnerable = !PLAYER->invulnerable;
     }
