@@ -21,22 +21,6 @@ bool Object::is_inside_screen()
     return true;
 }
 
-bool Object::is_collide(Object* other)
-{
-    if (destroyed || other->destroyed)
-        return false;
-
-    if (pos.x > other->pos.x + other->size.x
-        || pos.y > other->pos.y + other->size.y
-        || other->pos.x > pos.x + size.x
-        || other->pos.y > pos.y + size.y)
-    {
-        return false;
-    }
-
-    return true;
-}
-
 void Object::update_pos(u64 ns)
 {
     if (destroyed)

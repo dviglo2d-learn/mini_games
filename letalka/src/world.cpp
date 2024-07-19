@@ -106,6 +106,23 @@ void World::spawn_gunships()
     enemies.push_back(enemy);
 }
 
+/// Проверяет, что объект пересекается с другим объектом. Уничтоженные объекты не пересекаются
+static bool is_collide(const Object* a, const Object* b)
+{
+    if (a->destroyed || b->destroyed)
+        return false;
+
+    if (a->pos.x > b->pos.x + b->size.x
+        || a->pos.y > b->pos.y + b->size.y
+        || b->pos.x > a->pos.x + a->size.x
+        || b->pos.y > a->pos.y + a->size.y)
+    {
+        return false;
+    }
+
+    return true;
+}
+
 void World::update(u64 ns)
 {
     if (spawn_enemy_delay >= ns) // Безопасное вычитание, чтобы не было переполнения
@@ -149,7 +166,7 @@ void World::update(u64 ns)
     {
         for (shared_ptr<Enemy> enemy : enemies)
         {
-            if (proj->is_collide(enemy.get()))
+            if (is_collide(proj.get(), enemy.get()))
             {
                 enemy->destroyed = true;
                 proj->destroyed = true;
@@ -163,14 +180,14 @@ void World::update(u64 ns)
         // Ищем столкновения снарядов противника и корабля игрока
         for (shared_ptr<Projectile> proj : enemy_projectiles)
         {
-            if (proj->is_collide(PLAYER))
+            if (is_collide(proj.get(), PLAYER))
                 new_game();
         }
 
         // Ищем столкновения корбаля игрока с кораблями противника
         for (shared_ptr<Enemy> enemy : enemies)
         {
-            if (enemy->is_collide(PLAYER))
+            if (is_collide(enemy.get(), PLAYER))
                 new_game();
         }
     }
