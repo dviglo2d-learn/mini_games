@@ -40,6 +40,15 @@ PuzzleInterface::PuzzleInterface(weak_ptr<PuzzleLogic> logic)
 {
     StrUtf8 base_path = get_base_path();
     spritesheet_ = DV_TEXTURE_CACHE->get(base_path + "15_puzzle_data/textures/spritesheet.png");
+
+    StrUtf8 sound_path = base_path + "15_puzzle_data/sounds/tile_move.wav";
+    tile_move_sound_ = Mix_LoadWAV(sound_path.c_str());
+}
+
+PuzzleInterface::~PuzzleInterface()
+{
+    Mix_FreeChunk(tile_move_sound_); // Проверка на nullptr не нужна
+    tile_move_sound_ = nullptr;
 }
 
 void PuzzleInterface::on_click(vec2 mouse_pos)
@@ -54,7 +63,8 @@ void PuzzleInterface::on_click(vec2 mouse_pos)
     if (index_x >= 0 || index_x <= 3 || index_y >= 0 || index_y <= 3)
     {
         shared_ptr<PuzzleLogic> logic = logic_.lock();
-        logic->move({index_x, index_y});
+        if (logic->move({index_x, index_y}))
+            Mix_PlayChannel(-1, tile_move_sound_, 0);
     }
 }
 
