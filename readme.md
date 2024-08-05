@@ -18,15 +18,8 @@ chcp 65001
 :: Указываем пути к необходимым утилитам
 set "PATH=%SystemRoot%\system32;c:\programs\cmake\bin;c:\program files\git\bin"
 
-:: Качаем репозиторий с играми в папку repo
-git clone https://github.com/dviglo2d-learn/mini_games repo
-
-:: Качаем репозиторий движка в папку engine
-git clone https://github.com/dviglo2d/dviglo2d engine
-
-:: Так как в движке могут произойти изменения, ломающие обратную совместимость,
-:: то возвращаем состояние репозитория к определённой версии
-git -C engine reset --hard 47e4fc019cb36e74d9fe455cd201a168dcdcc82b
+:: Качаем репозиторий с играми и движок в папку repo
+git clone --recurse-submodules https://github.com/dviglo2d-learn/mini_games repo
 
 :: Создаём проекты для Visual Studio 2022 в папке build_vs, используя конфиг CMakeLists.txt из папки repo
 cmake.exe repo -B build_vs -G "Visual Studio 17" -A x64

@@ -1,5 +1,5 @@
 # Путь к исходникам движка
-set(engine_dir "${CMAKE_SOURCE_DIR}/../engine")
+set(engine_dir "${CMAKE_SOURCE_DIR}/dviglo2d")
 
 # Указываем минимальную версию CMake
 include(${engine_dir}/cmake/cmake_min_version.cmake)
