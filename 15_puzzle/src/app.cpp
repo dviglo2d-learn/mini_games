@@ -18,6 +18,7 @@ void App::setup()
     engine_params::window_size = ivec2(720, 700);
     engine_params::window_title = "Пятнашки";
     engine_params::vsync = -1;
+    engine_params::window_mode = WindowMode::windowed;
 }
 
 void App::start()

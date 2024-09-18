@@ -25,6 +25,7 @@ void App::setup()
     engine_params::msaa_samples = 4; // При значении 8 крэшится на сервере ГитХаба в Линуксе
     engine_params::window_title = "Кликер";
     engine_params::vsync = -1;
+    engine_params::window_mode = WindowMode::windowed;
 }
 
 void App::start()
