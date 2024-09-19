@@ -28,7 +28,7 @@ void App::setup()
 
 void App::start()
 {
-    SDL_SetWindowRelativeMouseMode(DV_OS_WINDOW->window(), SDL_TRUE);
+    SDL_SetWindowRelativeMouseMode(DV_OS_WINDOW->window(), true);
 
     StrUtf8 base_path = get_base_path();
     sprite_batch_ = make_unique<SpriteBatch>();
