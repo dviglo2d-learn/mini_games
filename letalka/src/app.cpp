@@ -36,22 +36,23 @@ void App::start()
     world_ = make_unique<World>();
 }
 
-bool App::handle_sdl_event(const SDL_Event& event)
+void App::handle_sdl_event(const SDL_Event& event)
 {
     switch (event.type)
     {
     case SDL_EVENT_KEY_DOWN:
     case SDL_EVENT_KEY_UP:
         on_key(event.key);
-        return true;
+        return;
 
     case SDL_EVENT_MOUSE_MOTION:
         on_mouse_motion(event.motion);
-        return true;
+        return;
 
     default:
         // Реагируем на закрытие приложения и изменение размера окна
-        return Application::handle_sdl_event(event);
+        Application::handle_sdl_event(event);
+        return;
     }
 }
 

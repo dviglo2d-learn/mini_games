@@ -20,7 +20,7 @@ public:
 
     void setup() override;
     void start() override;
-    bool handle_sdl_event(const SDL_Event& event) override;
+    void handle_sdl_event(const SDL_Event& event) override;
     void update(u64 ns) override;
     void draw() override;
 
