@@ -12,6 +12,9 @@ project("mini games")
 include(${engine_dir}/cmake/common.cmake)
 add_subdirectory(${engine_dir} dviglo2d)
 
+# Подключаем директорию с EnTT
+add_subdirectory(entt)
+
 # Папка для скомпилированных игр
 set(result_dir "${CMAKE_BINARY_DIR}/result")
 

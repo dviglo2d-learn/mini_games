@@ -15,8 +15,8 @@ endif()
 # Отладочная версия приложения будет иметь суффикс _d
 set_property(TARGET ${target_name} PROPERTY DEBUG_POSTFIX _d)
 
-# Подключаем библиотеку
-target_link_libraries(${target_name} PRIVATE dviglo)
+# Подключаем библиотеки
+target_link_libraries(${target_name} PRIVATE dviglo entt)
 
 # Копируем динамические библиотеки в папку с приложением
 dv_copy_shared_libs_to_bin_dir(${target_name} ${result_dir} copy_shared_libs_to_app_dir)

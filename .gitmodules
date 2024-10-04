@@ -1,3 +1,7 @@
 [submodule "dviglo2d"]
 	path = dviglo2d
 	url = https://github.com/dviglo2d/dviglo2d
+[submodule "entt/repo"]
+	path = entt/repo
+	url = https://github.com/dviglo2d-learn/entt
+	shallow = true
