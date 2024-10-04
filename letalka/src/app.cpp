@@ -118,7 +118,7 @@ void App::draw()
     glClearColor(0.f, 0.05f, 0.1f, 1.f);
     glClear(GL_COLOR_BUFFER_BIT);
 
-    // Настраиваем вьюпорт в окне
+    // Вычисляем положение вьюпорта в окне
 
     ivec2 window_size;
     SDL_GetWindowSizeInPixels(DV_OS_WINDOW->window(), &window_size.x, &window_size.y);
@@ -148,10 +148,18 @@ void App::draw()
         (window_size.y - viewport_size.y) / 2
     );
 
-    glViewport(viewport_pos.x, viewport_pos.y, viewport_size.x, viewport_size.y);
-
     // Выводим отрендеренную текстуру в окно
+#if true
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, fbo_->gpu_object_name());
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0); // 0 - default framebuffer
+    glBlitFramebuffer(0, 0, fbo_size.x, fbo_size.y,
+                      viewport_pos.x, viewport_pos.y + viewport_size.y, // Отражаем по вертикали
+                      viewport_pos.x + viewport_size.x, viewport_pos.y, // Отражаем по вертикали
+                      GL_COLOR_BUFFER_BIT, GL_NEAREST);
+#else // А можно так
+    glViewport(viewport_pos.x, viewport_pos.y, viewport_size.x, viewport_size.y);
     sprite_batch_->prepare_ogl(false, false);
     sprite_batch_->draw_sprite(fbo_->texture(), Rect(0.f, 0.f, viewport_size.x, viewport_size.y));
     sprite_batch_->flush();
+#endif
 }
