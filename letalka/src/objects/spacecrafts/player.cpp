@@ -1,9 +1,8 @@
 #include "player.hpp"
 
 #include "../projectiles/laser.hpp"
+#include "../../global.hpp"
 #include "../../world.hpp"
-
-#include <dviglo/main/os_window.hpp>
 
 
 Player::Player()
@@ -29,9 +28,8 @@ void Player::init()
 
     // Размещаем игрока в центре низа экрана
     f32 half_width = size.x / 2;
-    ivec2 screen_size = DV_OS_WINDOW->get_size_in_pixels();
-    f32 half_screen_width = screen_size.x * 0.5f;
-    pos = {half_screen_width - half_width, (f32)screen_size.y - size.y - 10.f};
+    f32 half_fbo_width = fbo_size.x * 0.5f;
+    pos = {half_fbo_width - half_width, (f32)fbo_size.y - size.y - 10.f};
 }
 
 void Player::on_mouse_motion(const SDL_MouseMotionEvent& event_data)
@@ -41,19 +39,17 @@ void Player::on_mouse_motion(const SDL_MouseMotionEvent& event_data)
 
     // Не позволяем кораблю персонажа выходить за границы экрана
 
-    ivec2 screen_size = DV_OS_WINDOW->get_size_in_pixels();
-
     if (pos.x < 0.f)
         pos.x = 0.f;
 
     if (pos.y < 0.f)
         pos.y = 0.f;
 
-    if (pos.x > (f32)screen_size.x - size.x)
-        pos.x = (f32)screen_size.x - size.x;
+    if (pos.x > (f32)fbo_size.x - size.x)
+        pos.x = (f32)fbo_size.x - size.x;
 
-    if (pos.y > (f32)screen_size.y - size.y)
-        pos.y = (f32)screen_size.y - size.y;
+    if (pos.y > (f32)fbo_size.y - size.y)
+        pos.y = (f32)fbo_size.y - size.y;
 }
 
 void Player::update_guns(u64 ns)

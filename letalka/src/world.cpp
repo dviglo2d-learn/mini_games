@@ -1,5 +1,7 @@
 #include "world.hpp"
 
+#include "global.hpp"
+
 #include "objects/projectiles/projectile.hpp"
 #include "objects/spacecrafts/enemies/drone.hpp"
 #include "objects/spacecrafts/enemies/fighter.hpp"
@@ -8,7 +10,6 @@
 
 #include <dviglo/fs/fs_base.hpp>
 #include <dviglo/gl_utils/texture_cache.hpp>
-#include <dviglo/main/os_window.hpp>
 
 #include <random>
 
@@ -56,8 +57,6 @@ void World::new_game()
 
 void World::spawn_drones()
 {
-    ivec2 screen_size = DV_OS_WINDOW->get_size_in_pixels();
-
     // Дрон слева
     shared_ptr<Drone> enemy = make_shared<Drone>();
     enemy->pos = {-enemy->size.x , 100.f};
@@ -65,18 +64,16 @@ void World::spawn_drones()
 
     // Дрон справа
     enemy = make_shared<Drone>();
-    enemy->pos = {(f32)screen_size.x , 100.f};
+    enemy->pos = {(f32)fbo_size.x , 100.f};
     enemies.push_back(enemy);
 }
 
 void World::spawn_fighters()
 {
-    ivec2 screen_size = DV_OS_WINDOW->get_size_in_pixels();
-
     // Истребитель за верхней границей экрана
     shared_ptr<Fighter> enemy = make_shared<Fighter>();
     f32 half_width = enemy->size.x * 0.5f;
-    uniform_int_distribution<> distrib((i32)half_width, screen_size.x - (i32)half_width);
+    uniform_int_distribution<> distrib((i32)half_width, fbo_size.x - (i32)half_width);
     f32 enemy_center_x = (f32)distrib(rand_generator);
     enemy->pos = {enemy_center_x - half_width, -enemy->size.y};
     enemies.push_back(enemy);
@@ -90,8 +87,6 @@ void World::spawn_fighters()
 
 void World::spawn_gunships()
 {
-    ivec2 screen_size = DV_OS_WINDOW->get_size_in_pixels();
-
     // Ганшип слева
     shared_ptr<Gunship> enemy = make_shared<Gunship>(true);
     uniform_int_distribution<> distrib(100, 600);
@@ -102,7 +97,7 @@ void World::spawn_gunships()
     // Ганшип справа
     enemy = make_shared<Gunship>(false);
     enemy_y = (f32)distrib(rand_generator);
-    enemy->pos = {(f32)screen_size.x, enemy_y};
+    enemy->pos = {(f32)fbo_size.x, enemy_y};
     enemies.push_back(enemy);
 }
 

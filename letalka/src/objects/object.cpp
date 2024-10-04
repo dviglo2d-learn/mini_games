@@ -1,6 +1,8 @@
 #include "object.hpp"
 
-#include <dviglo/main/os_window.hpp>
+#include "../global.hpp"
+
+#include <SDL3/SDL.h>
 
 
 vec2 Object::calc_center_pos()
@@ -13,9 +15,7 @@ bool Object::is_inside_screen()
     if (pos.x < 0 || pos.y < 0)
         return false;
 
-    ivec2 screen_size = DV_OS_WINDOW->get_size_in_pixels();
-
-    if (pos.x > (f32)screen_size.x - size.x || pos.y > (f32)screen_size.y - size.y)
+    if (pos.x > (f32)fbo_size.x - size.x || pos.y > (f32)fbo_size.y - size.y)
         return false;
 
     return true;
@@ -34,13 +34,11 @@ void Object::update_pos(u64 ns)
     // Объекты, которые находятся рядом с краем экрана, уничтожать не надо, так как
     // вражеские корабли создаются за границей экрана
     
-    ivec2 screen_size = DV_OS_WINDOW->get_size_in_pixels();
-
     // Область, в которой не будут уничтожаться объекты, больше области экрана
     const f32 border_size = 500.f;
 
     if (pos.x + size.x < -border_size || pos.y + size.y < -border_size
-        || pos.x > (f32)screen_size.x + border_size || pos.y > (f32)screen_size.y + border_size)
+        || pos.x > (f32)fbo_size.x + border_size || pos.y > (f32)fbo_size.y + border_size)
     {
         destroyed = true;
     }

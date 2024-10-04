@@ -1,5 +1,6 @@
 #pragma once
 
+#include <dviglo/gl_utils/fbo.hpp>
 #include <dviglo/graphics/sprite_batch.hpp>
 #include <dviglo/main/application.hpp>
 
@@ -14,6 +15,7 @@ class App : public Application
     unique_ptr<SpriteBatch> sprite_batch_;
     unique_ptr<SpriteFont> r_20_font_;
     unique_ptr<World> world_;
+    unique_ptr<Fbo> fbo_;
 
 public:
     App(const vector<StrUtf8>& args);
