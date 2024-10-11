@@ -1,7 +1,6 @@
 #include "app.hpp"
 
-#include "global.hpp"
-#include "objects/spacecrafts/player.hpp"
+#include "ecs_main.hpp"
 
 #include <dviglo/fs/fs_base.hpp>
 #include <dviglo/gl_utils/texture_cache.hpp>
@@ -9,8 +8,6 @@
 #include <dviglo/main/os_window.hpp>
 
 #include <format>
-
-using namespace glm;
 
 
 App::App(const vector<StrUtf8>& args)
@@ -31,10 +28,9 @@ void App::start()
 {
     SDL_SetWindowRelativeMouseMode(DV_OS_WINDOW->window(), true);
 
-    StrUtf8 base_path = get_base_path();
-    sprite_batch_ = make_unique<SpriteBatch>();
-    r_20_font_ = make_unique<SpriteFont>(base_path + "samples_data/fonts/ubuntu-r_20_simple.fnt");
-    world_ = make_unique<World>();
+    global_ = make_unique<Global>();
+
+    ecs_start();
 
     fbo_ = make_unique<Fbo>(fbo_size);
     fbo_->texture()->bind();
@@ -52,7 +48,7 @@ void App::handle_sdl_event(const SDL_Event& event)
         return;
 
     case SDL_EVENT_MOUSE_MOTION:
-        on_mouse_motion(event.motion);
+        ecs_on_mouse_motion(event.motion);
         return;
 
     default:
@@ -73,24 +69,19 @@ void App::on_key(const SDL_KeyboardEvent& event_data)
     if (event_data.type == SDL_EVENT_KEY_DOWN && event_data.repeat == false
         && event_data.scancode == SDL_SCANCODE_F2)
     {
-        WORLD->debug_draw = !WORLD->debug_draw;
+        global_->debug_draw = !global_->debug_draw;
     }
 
     if (event_data.type == SDL_EVENT_KEY_DOWN && event_data.repeat == false
         && event_data.scancode == SDL_SCANCODE_F3)
     {
-        PLAYER->invulnerable = !PLAYER->invulnerable;
+        global_->god_mode = !global_->god_mode;
     }
-}
-
-void App::on_mouse_motion(const SDL_MouseMotionEvent& event_data)
-{
-    PLAYER->on_mouse_motion(event_data);
 }
 
 void App::update(u64 ns)
 {
-    WORLD->update(ns);
+    ecs_update(ns);
 }
 
 void App::draw()
@@ -100,14 +91,9 @@ void App::draw()
     glViewport(0, 0, fbo_size.x, fbo_size.y);
     glClearColor(0.f, 0.f, 0.f, 0.f);
     glClear(GL_COLOR_BUFFER_BIT);
-    sprite_batch_->prepare_ogl(true, true);
-    WORLD->draw(sprite_batch_.get());
-
-    StrUtf8 score_text = "Счёт: " + to_string(PLAYER->score);
-    sprite_batch_->draw_string(score_text, r_20_font_.get(), vec2{4.f, 1.f}, 0xFF000000);
-    sprite_batch_->draw_string(score_text, r_20_font_.get(), vec2{3.f, 0.f}, 0xFFFFFFFF);
-
-    sprite_batch_->flush();
+    global_->sprite_batch()->prepare_ogl(true, true);
+    ecs_draw();
+    global_->sprite_batch()->flush();
     fbo_->texture()->bind();
     glGenerateMipmap(GL_TEXTURE_2D);
 
@@ -158,8 +144,8 @@ void App::draw()
                       GL_COLOR_BUFFER_BIT, GL_NEAREST);
 #else // А можно так
     glViewport(viewport_pos.x, viewport_pos.y, viewport_size.x, viewport_size.y);
-    sprite_batch_->prepare_ogl(false, false);
-    sprite_batch_->draw_sprite(fbo_->texture(), Rect(0.f, 0.f, viewport_size.x, viewport_size.y));
-    sprite_batch_->flush();
+    global_->sprite_batch()->prepare_ogl(false, false);
+    global_->sprite_batch()->draw_sprite(fbo_->texture(), Rect(0.f, 0.f, viewport_size.x, viewport_size.y));
+    global_->sprite_batch()->flush();
 #endif
 }

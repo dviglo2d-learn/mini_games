@@ -1,21 +1,15 @@
 #pragma once
 
 #include <dviglo/gl_utils/fbo.hpp>
-#include <dviglo/graphics/sprite_batch.hpp>
 #include <dviglo/main/application.hpp>
 
-#include "world.hpp"
-
-using namespace dviglo;
-using namespace std;
+#include "global.hpp"
 
 
 class App : public Application
 {
-    unique_ptr<SpriteBatch> sprite_batch_;
-    unique_ptr<SpriteFont> r_20_font_;
-    unique_ptr<World> world_;
     unique_ptr<Fbo> fbo_;
+    unique_ptr<Global> global_;
 
 public:
     App(const vector<StrUtf8>& args);
@@ -27,5 +21,4 @@ public:
     void draw() override;
 
     void on_key(const SDL_KeyboardEvent& event_data);
-    void on_mouse_motion(const SDL_MouseMotionEvent& event_data);
 };
