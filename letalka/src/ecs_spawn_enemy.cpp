@@ -48,8 +48,8 @@ static void create_drone(vec2 pos)
 
     entity ent = reg.create();
     reg.emplace<CObject>(ent, pos, drone_uv, collider);
-    reg.emplace<CEnemy>(ent, u64(0), hitbox);
-    reg.emplace<CDroneMarker>(ent);
+    reg.emplace<CEnemy>(ent, hitbox);
+    reg.emplace<CDrone>(ent, u64(0));
     reg.emplace<CVelocity>(ent, vec2(0.f, 0.f));
 }
 
@@ -74,7 +74,7 @@ static void create_fighter(vec2 pos)
 
     entity ent = reg.create();
     reg.emplace<CObject>(ent, pos, fighter_uv, collider);
-    reg.emplace<CEnemy>(ent, u64(0), hitbox);
+    reg.emplace<CEnemy>(ent, hitbox);
     reg.emplace<CFighterMarker>(ent);
     reg.emplace<CVelocity>(ent, vec2(0.f, 200.f));
 
@@ -104,7 +104,7 @@ static void create_gunship(vec2 pos)
 
     entity ent = reg.create();
     reg.emplace<CObject>(ent, pos, gunship_uv, collider);
-    reg.emplace<CEnemy>(ent, u64(0), hitbox);
+    reg.emplace<CEnemy>(ent, hitbox);
     reg.emplace<CGunshipMarker>(ent);
 
     if (pos.x < fbo_size.x / 2) // Появляется слева - движемся вправо

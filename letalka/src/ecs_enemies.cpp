@@ -8,39 +8,31 @@ void s_update_drone_velocities(u64 ns)
 {
     registry& reg = *GLOBAL->reg();
 
-    auto view = reg.view<CObject, CEnemy, CVelocity>(exclude<CDestroyedMarker>);
+    auto view = reg.view<CObject, CDrone, CVelocity>(exclude<CDestroyedMarker>);
 
-    for (entity ent : view)
+    for (auto [ent, obj, drone, velocity] : view.each())
     {
-        CObject& obj = view.get<CObject>(ent);
-        CEnemy& enemy = view.get<CEnemy>(ent);
-        CVelocity& velocity = view.get<CVelocity>(ent);
+        drone.lifetime += ns;
 
-        enemy.lifetime += ns;
+        constexpr f32 drone_speed = 100.f;
 
-        // Поведение дрона
-        if (reg.all_of<CDroneMarker>(ent))
+        // Три секунды дрон наводится на игрока по горизонтали
+        if (drone.lifetime < ns_per_second * 3)
         {
-            constexpr f32 drone_speed = 100.f;
+            entity player_ent = get_player();
+            CObject& player_obj = reg.get<CObject>(player_ent);
 
-            // Три секунды наводится на игрока по горизонтали
-            if (enemy.lifetime < ns_per_second * 3)
-            {
-                entity player_ent = get_player();
-                CObject& player_obj = reg.get<CObject>(player_ent);
+            f32 drone_center_x = obj.pos.x;
+            f32 player_center_x = player_obj.pos.x;
 
-                f32 drone_center_x = obj.pos.x;
-                f32 player_center_x = player_obj.pos.x;
-
-                if (drone_center_x < player_center_x)
-                    velocity.value = vec2(drone_speed, 0.f);
-                else
-                    velocity.value = vec2(-drone_speed, 0.f);
-            }
-            else // А потом движется вниз
-            {
-                velocity.value = vec2(0.f, drone_speed);
-            }
+            if (drone_center_x < player_center_x)
+                velocity.value = vec2(drone_speed, 0.f);
+            else
+                velocity.value = vec2(-drone_speed, 0.f);
+        }
+        else // А потом движется вниз
+        {
+            velocity.value = vec2(0.f, drone_speed);
         }
     }
 }
