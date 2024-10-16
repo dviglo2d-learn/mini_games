@@ -1,10 +1,8 @@
 #pragma once
 
 #include <dviglo/common/primitive_types.hpp>
-#include <entt/entt.hpp>
 
 using namespace dviglo;
-using namespace entt;
 
 
 // ===================== Компоненты =====================

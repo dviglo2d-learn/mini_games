@@ -1,8 +1,9 @@
 #pragma once
 
+#include "entt_wrapped.hpp"
+
 #include <dviglo/common/primitive_types.hpp>
 #include <dviglo/graphics/sprite_batch.hpp>
-#include <entt/entt.hpp>
 #include <glm/glm.hpp>
 
 using namespace dviglo;

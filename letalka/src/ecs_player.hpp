@@ -1,7 +1,8 @@
 #pragma once
 
+#include "entt_wrapped.hpp"
+
 #include <dviglo/common/primitive_types.hpp>
-#include <entt/entt.hpp>
 #include <SDL3/SDL.h>
 
 using namespace dviglo;
