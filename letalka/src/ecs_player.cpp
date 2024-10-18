@@ -41,17 +41,9 @@ void s_player_on_mouse_motion(const SDL_MouseMotionEvent& event_data)
     obj.pos += delta;
 
     // Не позволяем кораблю персонажа выходить за границы экрана
-    if (obj.pos.x < -obj.collider.pos.x + obj.collider.half_size.x)
-        obj.pos.x = -obj.collider.pos.x + obj.collider.half_size.x;
-
-    if (obj.pos.y < -obj.collider.pos.y + obj.collider.half_size.y)
-        obj.pos.y = -obj.collider.pos.y + obj.collider.half_size.y;
-
-    if (obj.pos.x > (f32)fbo_size.x - obj.collider.pos.x - obj.collider.half_size.x)
-        obj.pos.x = (f32)fbo_size.x - obj.collider.pos.x - obj.collider.half_size.x;
-
-    if (obj.pos.y > (f32)fbo_size.y - obj.collider.pos.y - obj.collider.half_size.y)
-        obj.pos.y = (f32)fbo_size.y - obj.collider.pos.y - obj.collider.half_size.y;
+    obj.pos = glm::clamp(obj.pos,
+                         -obj.collider.pos + obj.collider.half_size,
+                         vec2(fbo_size) - obj.collider.pos - obj.collider.half_size);
 }
 
 void s_draw_player()
