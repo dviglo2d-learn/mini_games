@@ -25,7 +25,9 @@ void s_update_drone_velocities(u64 ns)
             f32 drone_center_x = obj.pos.x;
             f32 player_center_x = player_obj.pos.x;
 
-            if (drone_center_x < player_center_x)
+            if (abs(drone_center_x - player_center_x) < 1.f)
+                velocity.value = vec2(0.f, 0.f); // Чтобы дрон не дрожал на месте
+            else if(drone_center_x < player_center_x)
                 velocity.value = vec2(drone_speed, 0.f);
             else
                 velocity.value = vec2(-drone_speed, 0.f);
